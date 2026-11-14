@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>School Management System</title>
+<link rel="icon" type="image/png" href="icon.png">
+<meta name="theme-color" content="#0f1b3d">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="School Management System">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&family=Figtree:wght@400;600&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="splash" role="img" aria-label="School Management System"><i class="ring"></i><i class="ring r2"></i><img class="logo3" alt="" src="logo.webp"><h1>School Management System</h1><p>Attendance · Results · Doubts · Reports</p><div class="bar"><i></i></div><small>Tap to skip</small></div>
+
+
+<div class="wrap">
+
+<!-- HOME -->
+<section id="home" class="hero">
+  <div>
+    <img id="homeLogo" class="logo hidden" alt="School logo"><h2 class="brand" id="homeSchool"></h2><p id="homeTag" style="margin-bottom:10px"></p>
+    <h1>Who is signing in?</h1>
+  </div>
+  <p>Choose your side to view attendance and records.</p>
+  <div class="doors">
+    <button class="door" id="goTeacher"><h2>Teachers</h2><span>Staff list, class results, student attendance</span></button>
+    <button class="door" id="goStudent"><h2>Students</h2><span>Homework, tests and results. Ask your teachers your doubts</span></button>
+    <button class="door" id="goParent"><h2>Parents</h2><span>Marks, attendance and dues. Chat with the class teacher or report a problem</span></button>
+    <button class="door" id="goPrincipal"><h2>Principal</h2><span>PIN needed. Manage teachers, parent reports and the notice board</span></button>
+  </div>
+  <div><h3 style="margin-bottom:10px">School summary</h3><div id="dash"></div></div>
+  <div class="notice"><h3>Notice board</h3><div id="notices"></div></div>
+  <p class="meta" id="syncNote"></p>
+</section>
+
+<!-- TEACHERS -->
+<section id="teachers" class="hidden">
+  <div class="bar">
+    <div class="row"><button class="btn" id="back">Back</button><h2 id="schoolTitle">Teachers</h2></div>
+    <div class="row">
+      <button class="btn" id="exportBtn">Export CSV</button>
+      <button class="btn" id="settingsBtn">Customize</button>
+    </div>
+  </div>
+
+  <div class="tabs" id="tTabs" role="tablist">
+    <button id="t-att" data-tab="att" role="tab" aria-selected="true">Attendance</button>
+    <button id="t-today" data-tab="today" role="tab" aria-selected="false">Today</button>
+    <button id="t-cls" data-tab="cls" role="tab" aria-selected="false">Classes</button>
+    <button id="t-res" data-tab="res" role="tab" aria-selected="false">Class result</button>
+    <button id="t-satt" data-tab="satt" role="tab" aria-selected="false">Student attendance</button>
+    <button id="t-asg" data-tab="asg" role="tab" aria-selected="false">Assignments</button>
+    <button id="t-exm" data-tab="exm" role="tab" aria-selected="false">Exams</button>
+    <button id="t-lib" data-tab="lib" role="tab" aria-selected="false">Library</button>
+    <button id="t-dbt" data-tab="dbt" role="tab" aria-selected="false">Doubts</button>
+    <button id="t-pch" data-tab="pch" role="tab" aria-selected="false">Parent chat</button>
+    <button id="t-tt" data-tab="tt" role="tab" aria-selected="false">Timetable maker</button>
+  </div>
+  <div id="tab-att">
+  <div class="total"><b id="totalNum">0</b><span>teachers in total</span></div>
+  <div class="stats" id="stats"></div>
+
+  <div class="tools">
+    <input type="date" id="date" aria-label="Attendance date">
+    <input type="search" id="search" placeholder="Search name or subject" aria-label="Search teachers">
+    
+    <span class="meta">View only. Only the principal can change teacher details and attendance.</span>
+  </div>
+
+  <div class="scroll"><table>
+    <thead><tr id="thead"></tr></thead>
+    <tbody id="tbody"></tbody>
+  </table></div>
+  </div>
+
+  <div id="tab-today" class="hidden">
+    <div class="panel">
+      <h3>Post for the class</h3>
+      <div class="grid">
+        <div><label for="kType">Type</label><select id="kType"><option>Homework</option><option>Test</option><option>Note</option></select></div>
+        <div><label for="kClass">Send to class</label><select id="kClass"></select></div>
+        <div><label for="kTeacher">Teacher</label><select id="kTeacher"></select></div>
+        <div><label for="kDate">For date</label><input type="date" id="kDate"></div>
+      </div>
+      <label for="kTitle">Title</label><input id="kTitle" placeholder="e.g. Chapter 5 exercises">
+      <label for="kBody">Details</label><textarea id="kBody" rows="3" placeholder="Pages, topics, marks, instructions"></textarea>
+      <div class="actions"><button class="btn main" id="kPost">Post it</button></div>
+    </div>
+    <div class="tools">
+      <input type="date" id="kView" aria-label="Show posts for date">
+      <select id="kClassF" aria-label="Filter by class"></select>
+      <select id="kFilter" aria-label="Filter by type"><option>All</option><option>Homework</option><option>Test</option><option>Note</option></select>
+    </div>
+    <div id="kList"></div>
+  </div>
+
+  <div id="tab-cls" class="hidden">
+    <div class="panel">
+      <h3>Classes and student PINs</h3>
+      <p class="meta">Each class has a class teacher. Anything sent to a class shows on that class's page for students.</p>
+      <div class="grid">
+        <div><label for="cName">Class name</label><input id="cName" placeholder="e.g. 8A"></div>
+        <div><label for="cTeacher">Class teacher</label><select id="cTeacher"></select></div>
+        
+      </div>
+      <div class="actions"><button class="btn main" id="cAdd">Add class</button></div>
+    </div>
+    <div class="scroll"><table><thead><tr><th>Class</th><th>Class teacher</th><th></th></tr></thead><tbody id="cBody"></tbody></table></div>
+  </div>
+
+  <div id="tab-res" class="hidden">
+    <div id="rLogin" class="panel">
+      <h3>Teacher login</h3>
+      <p class="meta">Select your name and enter the login PIN given by the principal. This opens your class tools, student doubts and parent chat.</p>
+      <div class="grid"><div><label for="rTeacher">Teacher</label><select id="rTeacher"></select></div><div><label for="rPin">Login PIN</label><input type="password" id="rPin" inputmode="numeric" maxlength="4"></div></div>
+      <div class="actions"><button class="btn main" id="rGo">Log in</button></div>
+    </div>
+    <div id="rMain" class="hidden">
+      <div class="tools"><b id="rWho"></b><select id="rClass" aria-label="My class"></select><button class="btn" id="rOut">Log out</button></div>
+            <div id="rv-res">
+      <div class="panel">
+        <h3 id="rFormH">Enter result</h3>
+        <div class="grid">
+          <div><label for="rStu">Student</label><select id="rStu"></select></div>
+          <div><label for="rExam">Exam</label><input id="rExam" list="rExams" placeholder="e.g. Unit Test 1"><datalist id="rExams"></datalist></div>
+          <div><label for="rSub">Subject</label><input id="rSub"></div>
+          <div><label for="rMax">Maximum marks</label><input type="number" id="rMax" min="1"></div>
+          <div><label for="rGot">Obtained marks</label><input type="number" id="rGot" min="0"></div>
+        </div>
+        <label for="rRem">Remarks</label><input id="rRem" placeholder="Optional comment for the student">
+        <p class="meta">Percentage and grade are worked out automatically (A+ 90 and above, A 80, B 70, C 60, D 50, E 40, F below 40).</p>
+        <div class="actions"><button class="btn hidden" id="rCancel">Cancel edit</button><button class="btn main" id="rSave">Save result</button></div>
+      </div>
+      <div class="tools"><select id="rFilter" aria-label="Exam filter"></select></div>
+      <div class="scroll"><table><thead><tr><th>Roll</th><th>Student</th><th>Exam</th><th>Subject</th><th>Max</th><th>Obtained</th><th>%</th><th>Grade</th><th>Remarks</th><th></th></tr></thead><tbody id="rBody"></tbody></table></div>
+      <p class="meta" style="margin-top:8px">Students in this class: <span id="rRoster"></span></p>
+      </div>
+      <div id="rv-asg" class="hidden">
+        <div class="panel"><h3>Give an assignment</h3><div class="grid"><div><label for="aTitle">Title</label><input id="aTitle" placeholder="e.g. Chapter 3 questions"></div><div><label for="aDue">Due date</label><input type="date" id="aDue"></div></div><p class="meta">After adding, tick each student who has submitted. Students see their own status.</p><div class="actions"><button class="btn main" id="aAdd">Add assignment</button></div></div>
+        <div id="aList"></div>
+      </div>
+      <div id="rv-exm" class="hidden">
+        <div class="panel"><h3>Create an online exam</h3><div class="grid"><div><label for="eTitle">Exam title</label><input id="eTitle" placeholder="e.g. Unit Test 2"></div><div><label for="eSub">Subject</label><input id="eSub"></div><div><label for="ePer">Marks per question</label><input type="number" id="ePer" min="1" value="1"></div><div><label for="ePass">Pass percentage</label><input type="number" id="ePass" min="1" max="100" value="40"></div></div>
+        <label for="eQs">Questions, one per line: question | option A | option B | option C | option D | correct letter</label><textarea id="eQs" rows="6" placeholder="Capital of India? | Mumbai | Delhi | Pune | Jaipur | B"></textarea>
+        <p class="meta">Students in your class get it in their section. Marks, pass/fail and grade are worked out the moment they submit.</p><div class="actions"><button class="btn main" id="eAdd">Give exam to class</button></div></div>
+        <div id="eList"></div>
+      </div>
+      <div id="rv-lib" class="hidden">
+        <div class="panel"><h3>Publish a book</h3><div class="grid"><div><label for="lTitle">Title</label><input id="lTitle"></div><div><label for="lTo">Show to</label><select id="lTo"><option value="c">My class</option><option value="0">All classes</option></select></div><div><label for="lFile">PDF or picture</label><input type="file" id="lFile" accept="application/pdf,image/*"></div></div><p class="meta">Up to 10 MB each when the server is running (1.5 MB without it).</p><div class="actions"><button class="btn main" id="lAdd">Publish</button></div></div>
+        <div id="lList"></div>
+      </div>
+      <div id="rv-dbt" class="hidden">
+        <div class="tools"><select id="dFilter" aria-label="Doubts filter"><option value="open">Open doubts</option><option value="all">All doubts</option></select><span class="meta">Doubts that students sent to you. Your answer shows on their page.</span></div>
+        <div id="dList"></div>
+      </div>
+      <div id="rv-pch" class="hidden">
+        <p class="meta" style="margin-bottom:10px">Messages from parents of your class. Only the class teacher sees them here.</p>
+        <div id="pcList"></div>
+      </div>
+      <div id="rv-cls" class="hidden">
+        <div class="total"><b id="mTotal">0</b><span id="mTotalLbl">students</span></div>
+        <div class="panel">
+          <h3>Add a student to this class</h3>
+          <div class="grid"><div><label for="mRoll">Roll no.</label><input id="mRoll"></div><div><label for="mName">Student name</label><input id="mName"></div></div>
+          <div class="actions"><button class="btn main" id="mAdd">Add student</button></div>
+        </div>
+        <h3 style="margin:18px 0 8px">Daily attendance</h3>
+        <div class="tools"><input type="date" id="mDate" aria-label="Attendance date"><button class="btn" id="mAll">Mark all present</button><span class="meta">Attendance you mark shows on the student's page.</span></div>
+        <div class="stats" id="mStats"></div>
+        <div class="scroll"><table><thead><tr><th>Roll</th><th>Student</th><th>Attendance on this date</th><th>Overall</th><th></th></tr></thead><tbody id="mBody"></tbody></table></div>
+        <h3 style="margin:22px 0 8px">Monthly report</h3>
+        <div class="panel">
+          <p class="meta">On the last day of the month, publish each student's attendance. Example: 30 days minus 3 holidays = 27 working days, so Sunita attended 24 of 27. Students and the whole class can see it but cannot change it.</p>
+          <div class="grid">
+            <div><label for="mrMonth">Month</label><input type="month" id="mrMonth"></div>
+            <div><label for="mrDays">Days in month</label><input id="mrDays" readonly></div>
+            <div><label for="mrHol">Holidays</label><input type="number" id="mrHol" min="0"></div>
+            <div><label for="mrWork">Working days</label><input id="mrWork" readonly></div>
+          </div>
+          <div class="actions"><span class="meta" id="mrNote" style="margin-right:auto"></span><button class="btn" id="mrFill">Fill from daily attendance</button><button class="btn main" id="mrPub">Publish report</button></div>
+        </div>
+        <div class="scroll"><table><thead><tr><th>Roll</th><th>Student</th><th>Days attended</th><th>%</th></tr></thead><tbody id="mrBody"></tbody></table></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-tt" class="hidden">
+    <div class="panel">
+      <h3>Make a timetable</h3>
+      <label for="ttMode">Timetable type</label>
+      <select id="ttMode"><option value="school">School timetable</option><option value="exam">Exam timetable</option></select>
+      <div id="ttSchool">
+        <label for="ttClasses">Classes (separate with commas)</label><input id="ttClasses" value="6A, 6B">
+        <div class="grid">
+          <div><label for="ttDays">Days a week</label><select id="ttDays"><option value="5">5 (Mon-Fri)</option><option value="6" selected>6 (Mon-Sat)</option></select></div>
+          <div><label for="ttPer">Periods a day</label><input type="number" id="ttPer" min="1" max="10" value="7"></div>
+          <div><label for="ttStart">Starts at</label><input type="time" id="ttStart" value="08:00"></div>
+          <div><label for="ttLen">Period minutes</label><input type="number" id="ttLen" min="20" max="90" value="40"></div>
+          <div><label for="ttBrkAfter">Break after period</label><input type="number" id="ttBrkAfter" min="0" max="10" value="4"></div>
+          <div><label for="ttBrkLen">Break minutes</label><input type="number" id="ttBrkLen" min="0" max="60" value="20"></div>
+        </div>
+        <label for="ttSubs">One subject per line: subject, teacher, periods per week</label>
+        <textarea id="ttSubs" rows="6" placeholder="Mathematics, Anita Sharma, 6"></textarea>
+        <div class="actions" style="margin-top:8px"><button class="btn" id="ttFill">Fill from my teachers</button></div>
+      </div>
+      <div id="ttExam" class="hidden">
+        <label for="ttExamName">Exam name</label><input id="ttExamName" value="Half-yearly Exam">
+        <label for="ttSubjects">Subjects in exam order (separate with commas)</label><input id="ttSubjects" value="English, Mathematics, Science, Social Science, Hindi, Computer Science">
+        <div class="grid">
+          <div><label for="ttDate">First exam date</label><input type="date" id="ttDate"></div>
+          <div><label for="ttETime">Starts at</label><input type="time" id="ttETime" value="10:00"></div>
+          <div><label for="ttDur">Paper minutes</label><input type="number" id="ttDur" min="30" max="300" value="180"></div>
+          <div><label for="ttSkip">Skip days</label><select id="ttSkip"><option value="sun">Sunday only</option><option value="both">Saturday and Sunday</option></select></div>
+          <div><label for="ttGap">Holidays between exams (days)</label><input type="number" id="ttGap" min="0" max="10" value="1"></div>
+        </div>
+        <p class="meta">The holiday gap is added after every exam, so students get study days between papers. Weekly off days are skipped as well. Teachers from your list are assigned as invigilators in turn.</p>
+      </div>
+      <div class="actions"><button class="btn main" id="ttGo">Create timetable</button></div>
+    </div>
+    <div id="ttOut"></div>
+  </div>
+</section>
+
+<!-- STUDENTS -->
+<section id="students" class="hidden">
+  <div class="bar"><div class="row"><button class="btn" id="sBack">Back</button><h2 id="sTitle">Students</h2></div></div>
+  <div id="sPick">
+    <div class="panel"><h3>My profile</h3><p class="meta">Enter your class, roll number and name to open your page. New here? Create your profile.</p><div class="grid"><div><label for="pfClass">Class</label><select id="pfClass"></select></div><div><label for="pfRoll">Roll no.</label><input id="pfRoll"></div><div><label for="pfName">Name</label><input id="pfName"></div></div><div class="actions"><button class="btn" id="pfNew">Create my profile</button><button class="btn main" id="pfOpen">Open my profile</button></div></div>
+    <p class="meta" style="margin-bottom:14px">Choose a class to see its homework, tests, notes and results.</p>
+    <div class="doors" id="sClasses"></div>
+  </div>
+  <div id="sClass" class="hidden">
+    <div class="total"><b id="sClsName"></b><span id="sTeach"></span></div>
+    <div id="sUp"></div>
+    <div class="tools">
+      <input type="date" id="sDate" aria-label="Show posts for date">
+      <select id="sFilter" aria-label="Filter by type"><option>All</option><option>Homework</option><option>Test</option><option>Note</option></select>
+    </div>
+    <div id="sList"></div>
+    <div class="panel" id="myRes">
+      <h3>Results and attendance</h3>
+      <div class="tools"><select id="stName" aria-label="Student"></select><select id="stExam" aria-label="Exam"></select><button class="btn" id="stLock"></button><button class="btn hidden" id="stRemove">Remove my lock</button></div>
+      <div id="stTable"></div>
+    </div>
+    <div class="panel" id="myDbt"><h3>💬 Ask a teacher (doubts)</h3>
+      <div id="dbGate"></div>
+      <div id="dbForm" class="hidden">
+        <p class="meta" id="dbAs"></p>
+        <div class="grid"><div><label for="dbT">Teacher</label><select id="dbT"></select></div><div><label for="dbS">Subject or topic</label><input id="dbS" maxlength="80" placeholder="e.g. Algebra, exercise 4"></div></div>
+        <label for="dbM">Your doubt</label><textarea id="dbM" rows="3" maxlength="1500" placeholder="Write your question"></textarea>
+        <label for="dbF">Attach a PDF or picture (optional)</label><input type="file" id="dbF" accept="application/pdf,image/*">
+        <div class="actions"><button class="btn main" id="dbGo">Send to teacher</button></div>
+        <div id="dbList"></div>
+      </div>
+    </div>
+    <div class="panel" id="sLib"><h3>📚 Digital library</h3><div id="slOut"></div></div>
+    <div class="panel" id="clsAtt">
+      <h3>Whole class attendance</h3>
+      <div class="tools"><select id="caView" aria-label="View"><option value="m">Monthly report</option><option value="d">Daily</option></select><select id="caMonth" aria-label="Month"></select><input type="date" id="caDate" aria-label="Date"></div>
+      <div id="caOut"></div>
+    </div>
+    <div id="sTT"></div>
+  </div>
+</section>
+
+<!-- PARENTS -->
+<section id="parents" class="hidden">
+  <div class="bar"><div class="row"><button class="btn" id="paBack">Back</button><h2>Parent dashboard</h2></div></div>
+  <div class="panel"><h3>Find your child</h3><div class="grid"><div><label for="paClass">Class</label><select id="paClass"></select></div><div><label for="paRoll">Roll no.</label><input id="paRoll"></div><div><label for="paName">Child's name</label><input id="paName"></div></div><div class="actions"><button class="btn main" id="paGo">Open dashboard</button></div></div>
+  <div class="row" style="margin-bottom:16px"><button class="btn main" id="paChatBtn">💬 Chat with class teacher</button><button class="btn" id="paRepBtn">🚩 Report a problem</button></div>
+  <div id="paBox"></div>
+  <div id="paOut"></div>
+</section>
+
+<!-- PRINCIPAL -->
+<section id="principal" class="hidden">
+  <div class="bar">
+    <div class="row"><button class="btn" id="pBack">Lock and exit</button><h2 id="pTitle">Principal</h2></div>
+    <button class="btn" id="pSet">Customize school</button>
+  </div>
+  <div class="tabs" id="pTabs" role="tablist">
+    <button id="pt-teachers" data-ptab="teachers" role="tab" aria-selected="true">Teachers</button>
+    <button id="pt-stu" data-ptab="stu" role="tab" aria-selected="false">Students</button>
+    <button id="pt-att" data-ptab="att" role="tab" aria-selected="false">Attendance</button>
+    <button id="pt-fee" data-ptab="fee" role="tab" aria-selected="false">Fees and dues</button>
+    <button id="pt-notice" data-ptab="notice" role="tab" aria-selected="false">Notice board</button>
+    <button id="pt-rep" data-ptab="rep" role="tab" aria-selected="false">Reports</button>
+  </div>
+  <div id="p-teachers">
+    <div class="total"><b id="pTotal">0</b><span>teachers on staff</span></div>
+    <div class="tools"><button class="btn main" id="pAdd">Add teacher</button><span class="meta">As principal you can see and edit every record, including ones teachers made private.</span></div>
+    <div class="scroll"><table><thead><tr><th>Name</th><th>Subject</th><th>Phone</th><th>Email</th><th>Privacy</th><th></th></tr></thead><tbody id="pBody"></tbody></table></div>
+  </div>
+  <div id="p-stu" class="hidden">
+    <div class="panel">
+      <h3>Add student</h3>
+      <div class="grid">
+        <div><label for="uClass">Class</label><select id="uClass"></select></div>
+        <div><label for="uRoll">Roll no.</label><input id="uRoll"></div>
+        <div><label for="uName">Name</label><input id="uName"></div>
+        
+      </div>
+      <div class="actions"><button class="btn main" id="uAdd">Add student</button></div>
+    </div>
+    <div class="scroll"><table><thead><tr><th>Class</th><th>Roll</th><th>Name</th><th>Results privacy</th><th>Sign-in PIN</th><th></th></tr></thead><tbody id="uBody"></tbody></table></div>
+  </div>
+  <div id="p-att" class="hidden">
+    <div class="stats" id="pStats"></div>
+    <div class="tools"><input type="date" id="pDate" aria-label="Attendance date"><button class="btn" id="pMarkAll">Mark all present</button><span class="meta">Only the principal marks teacher attendance.</span></div>
+    <div class="scroll"><table><thead><tr><th>Teacher</th><th>Status</th></tr></thead><tbody id="pAttBody"></tbody></table></div>
+  </div>
+  <div id="p-fee" class="hidden">
+    <div class="panel"><h3>Add a due</h3><div class="grid"><div><label for="fClass">Class</label><select id="fClass"></select></div><div><label for="fStu">Student</label><select id="fStu"></select></div><div><label for="fTitle">Fee name</label><input id="fTitle" placeholder="e.g. Term 2 fee"></div><div><label for="fAmt">Amount</label><input type="number" id="fAmt" min="1"></div></div><div class="actions"><button class="btn main" id="fAdd">Add due</button></div></div>
+    <div class="stats" id="fStats"></div>
+    <div class="scroll"><table><thead><tr><th>Class</th><th>Student</th><th>Fee</th><th>Amount</th><th>Status</th><th></th></tr></thead><tbody id="fBody"></tbody></table></div>
+  </div>
+  <div id="p-rep" class="hidden">
+    <div class="stats" id="rpStats"></div>
+    <div class="tools"><select id="rpFS" aria-label="Status"><option value="">All statuses</option><option>New</option><option>In progress</option><option>Resolved</option></select><select id="rpFC" aria-label="Type"></select><span class="meta">Reports sent by parents. Only the principal sees them.</span></div>
+    <div id="rpList"></div>
+  </div>
+  <div id="p-notice" class="hidden">
+    <div class="panel">
+      <h3 id="nHead">Post a notice</h3>
+      <label for="nTitle">Title</label><input id="nTitle" placeholder="e.g. Holiday on Monday">
+      <label for="nBody">Details</label><textarea id="nBody" rows="3"></textarea>
+      <label class="chk"><input type="checkbox" id="nImp" style="width:auto"> Mark as important (shown first)</label>
+      <div class="actions"><button class="btn hidden" id="nCancel">Cancel edit</button><button class="btn main" id="nPost">Post notice</button></div>
+    </div>
+    <div id="pNotices"></div>
+  </div>
+</section>
+</div>
+
+<!-- Teacher dialog -->
+<dialog id="tDlg"><form method="dialog" id="tForm">
+  <h3 id="tTitle">Add teacher</h3>
+  <label for="fName">Full name</label><input type="text" id="fName" required>
+  <label for="fSub">Subject</label><input type="text" id="fSub">
+  <label for="fPhone">Phone</label><input type="tel" id="fPhone">
+  <label for="fMail">Email</label><input type="email" id="fMail">
+  <label for="fLpin">Result login PIN (4 digits)</label><input type="text" id="fLpin" inputmode="numeric" maxlength="4" pattern="[0-9]{4}">
+  <div class="actions">
+    <button type="button" class="btn danger hidden" id="delT">Delete</button>
+    <button type="button" class="btn" data-close>Cancel</button>
+    <button type="submit" class="btn main">Save teacher</button>
+  </div>
+</form></dialog>
+
+<!-- PIN dialog -->
+<dialog id="pinDlg"><form method="dialog" id="pinForm" novalidate>
+  <h3 id="pinTitle">Enter PIN</h3>
+  <p id="pinHelp" style="margin:0;color:var(--muted)"></p>
+  <label for="pinIn">4-digit PIN</label><input type="password" id="pinIn" inputmode="numeric" maxlength="4" autocomplete="off">
+  <p id="pinErr" role="alert" style="margin:6px 0 0;min-height:1.3em;color:var(--a);font-weight:600"></p>
+  <div class="actions"><button type="button" class="btn" data-close>Cancel</button><button type="submit" class="btn main">Continue</button></div>
+</form></dialog>
+
+<!-- Settings dialog -->
+<dialog id="sDlg"><form method="dialog" id="sForm">
+  <h3>Customize</h3>
+  <div id="sPrin"><label for="sName">School name</label><input type="text" id="sName">
+  <label for="sTag">Tagline (optional)</label><input type="text" id="sTag" placeholder="e.g. Learn. Grow. Lead.">
+  <label for="sLogo">School logo or picture</label><input type="file" id="sLogo" accept="image/*">
+  <div class="row" style="margin-top:8px"><img id="sLogoPrev" class="logo sm hidden" alt="Logo preview"><button type="button" class="btn hidden" id="sLogoDel">Remove logo</button></div></div>
+  <label for="sColor">Accent colour</label><input type="color" id="sColor">
+  <label>Columns to show</label>
+  <label class="chk"><input type="checkbox" id="cSub"> Subject</label>
+  <label class="chk"><input type="checkbox" id="cPhone"> Phone</label>
+  <label class="chk"><input type="checkbox" id="cMail"> Email</label>
+  <label for="sTheme">Theme</label>
+  <select id="sTheme" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--line);background:var(--bg)">
+    <option value="auto">Match device</option><option value="light">Light</option><option value="dark">Dark</option>
+  </select>
+  <div class="actions"><button type="button" class="btn danger" id="resetBtn">Reset all data</button><button type="button" class="btn" data-close>Cancel</button><button type="submit" class="btn main">Save settings</button></div>
+</form></dialog>
+
+<dialog id="exDlg" style="width:min(640px,94vw)"><h3 id="exT"></h3><div id="exQ"></div><div class="actions"><button type="button" class="btn" data-close>Close</button><button type="button" class="btn main" id="exSend">Submit exam</button></div></dialog>
+<dialog id="bkDlg" style="width:min(820px,96vw)"><h3 id="bkT"></h3><div id="bkV"></div><div class="actions"><a class="btn" id="bkA" target="_blank" rel="noopener">Open in new tab</a><button type="button" class="btn main" data-close>Close</button></div></dialog>
+<div id="toast" role="status"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
